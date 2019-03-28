@@ -136,4 +136,3 @@ if __name__ == "__main__":
         print "Timeout after " + TIMEOUT.__str__() + " seconds"
         exit(1)
     getSocket.close()
-
