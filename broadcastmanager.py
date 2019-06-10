@@ -61,8 +61,8 @@ CLOSE_KODI = ('{"META":{'
 
 # Define RaspRemote Data to be sent, JSON formatted
 RASP_REMOTE = ('{"META":{'
-               '"ObjectCount":2,'
-               '"ObjectNames":["AirConditioner","Heater"]'
+               '"ObjectCount":3,'
+               '"ObjectNames":["AirConditioner","Heater","Pruebas"]'
                '},'
                '"AirConditioner":{'
                '"Name":"AA Salón",'
@@ -77,7 +77,15 @@ RASP_REMOTE = ('{"META":{'
                '"Type":3,"Address":"https://ewolvy.mooo.com",'
                '"Port":1207,'
                '"Alias":"HBathroom",'
-               '"Description":"Calefactor en salón de Sa Ràpita"}'
+               '"Description":"Calefactor en salón de Sa Ràpita"'
+               '},'
+               '"Pruebas":{'
+               '"Name":"Pruebas dragón",'
+               '"Type":3,"Address":"https://ewolvy.mooo.com",'
+               '"Port":7012,'
+               '"Alias":"Pruebas",'
+               '"Description":"Pruebas en Dragón en Sa Ràpita"'
+               '}'
                '}\n')
 
 

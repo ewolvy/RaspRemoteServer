@@ -22,7 +22,7 @@ class AuthHandler(SimpleHTTPRequestHandler):
     def execute(self, command):
         print(command)
         result = os.system(command)
-        self.wfile.write(json.dumps({"Command":result}))
+        self.wfile.write(json.dumps({"Command": result}))
 
     def do_HEAD(self):
         print "Send header"
@@ -57,6 +57,9 @@ class AuthHandler(SimpleHTTPRequestHandler):
             elif re.match('/HBathroom/', self.path) is not None:
                 send_command = init_rf_send + self.path[11:]
                 self.execute(send_command)
+            elif re.match('/Pruebas/', self.path) is not None:
+                send_command = init_rf_send + self.path[9:]
+                self.wfile.write(json.dumps({"Command": send_command}))
             elif re.match('/exitprogram/', self.path) is not None:
                 self.wfile.write(json.dumps({"Exit": 0}))
                 time.sleep(1)
@@ -77,8 +80,10 @@ def create_server(port, password):
     httpd.socket = ssl.wrap_socket(httpd.socket, server_side=True,
                                    # certfile='/home/osmc/ewolvy.mooo.com.pem',
                                    # keyfile='/home/osmc/ewolvy.mooo.com.private.pem',
-                                   certfile='./ewolvy.mooo.com.pem',
-                                   keyfile='./ewolvy.mooo.com.private.pem',
+                                   # certfile='./ewolvy.mooo.com.pem',
+                                   # keyfile='./ewolvy.mooo.com.private.pem',
+                                   certfile='./fullchain.pem',
+                                   keyfile='./privkey.pem',
                                    ssl_version=ssl.PROTOCOL_TLSv1)
     httpd.serve_forever()
 
