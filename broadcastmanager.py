@@ -62,7 +62,7 @@ CLOSE_KODI = ('{"META":{'
 # Define RaspRemote Data to be sent, JSON formatted
 RASP_REMOTE = ('{"META":{'
                '"ObjectCount":3,'
-               '"ObjectNames":["AirConditioner","Heater","Pruebas"]'
+               '"ObjectNames":["AirConditioner","Heater","Pruebas Palma"]'
                '},'
                '"AirConditioner":{'
                '"Name":"AA Salón",'
@@ -79,14 +79,13 @@ RASP_REMOTE = ('{"META":{'
                '"Alias":"HBathroom",'
                '"Description":"Calefactor en salón de Sa Ràpita"'
                '},'
-               '"Pruebas":{'
-               '"Name":"Pruebas dragón",'
-               '"Type":3,"Address":"https://ewolvy.mooo.com",'
-               '"Port":7012,'
+               '"Pruebas Palma":{'
+               '"Name":"Pruebas Palma",'
+               '"Type":3,"Address":"https://192.168.1.230",'
+               '"Port":1207,'
                '"Alias":"Pruebas",'
-               '"Description":"Pruebas en Dragón en Sa Ràpita"'
-               '}'
-               '}\n')
+               '"Description":"Pruebas en Palma"'
+               '}}\n')
 
 
 # Function to create or get the socket:
