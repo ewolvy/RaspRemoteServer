@@ -29,5 +29,5 @@ if __name__ == "__main__":
         with open("fujitsu\\" + filename) as fin:
             ws.write(0, i, filename)
             for j, line in enumerate(islice(fin, 2, None)):
-                ws.write (j + 1, i, line.split()[1])
+                ws.write(j + 1, i, line.split()[1])
     wb.save("prueba.xls")
