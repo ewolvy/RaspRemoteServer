@@ -119,10 +119,10 @@ def toRaw(string_code):
             _swing_group.append([x, _swing[count * 3 + 1]])
         elif count * 3 + 1 <= len(_swing):
             _swing_group.append([x])
-    _normal_raw = []
-    _power_raw = []
-    _swing_raw = []
-    for x in _normal_group:
+    _normal_raw = ["           3340    1600     600     600     600     600"]
+    _power_raw = ["           3340    1600     600     600     600     600"]
+    _swing_raw = ["           3340    1600     600     600     600     600"]
+    for x in _normal_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
                 first = "            600     600"
@@ -154,7 +154,7 @@ def toRaw(string_code):
                 first = "            600    1600"
             _normal_raw.append([first])
 
-    for x in _power_group:
+    for x in _power_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
                 first = "            600     600"
@@ -186,7 +186,7 @@ def toRaw(string_code):
                 first = "            600    1600"
             _power_raw.append([first])
 
-    for x in _swing_group:
+    for x in _swing_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
                 first = "            600     600"
@@ -243,13 +243,16 @@ def prepareList():
 
 
 myList = prepareList()
-for code in myList:
-    print "        {}".format(code[0])
-    for raw in code[1]:
+for line in myList:
+    print ("")
+    print "        name {}".format(line[0])
+    for raw in line[1]:
         print "".join(raw)
-    print "        {}_POWER".format(code[0])
-    for raw in code[2]:
+    print ("")
+    print "        name {}_POWER".format(line[0])
+    for raw in line[2]:
         print "".join(raw)
-    print "        {}_SWING".format(code[0])
-    for raw in code[3]:
+    print ("")
+    print "        name {}_SWING".format(line[0])
+    for raw in line[3]:
         print "".join(raw)
