@@ -14,6 +14,9 @@ FANS_DICT = dict(zip(FANS[0], FANS[1]))
 POWER_DICT = {"0": "", "1": "_POWER"}
 SWING_DICT = {"0": "", "1": "_SWING"}
 
+POWER_OFF = "146300101002FD"
+FIX = "14630010106C93"
+
 
 def calculateChecksum(from_code):
     list_code = wrap(from_code, 2)
@@ -32,7 +35,7 @@ def getCode(_mode, _fan, _temp):
     _name = "{}_{}_{}".format(MODES_DICT[_mode],
                               FANS_DICT[_fan],
                               TEMPS_DICT[_temp])
-    _code = "{}{}00{}0{}00000020".format(INIT,
+    _code = "{}{}10{}0{}00000020".format(INIT,
                                          _temp,
                                          _mode,
                                          _fan)
@@ -119,103 +122,103 @@ def toRaw(string_code):
             _swing_group.append([x, _swing[count * 3 + 1]])
         elif count * 3 + 1 <= len(_swing):
             _swing_group.append([x])
-    _normal_raw = ["           3340    1600     600     600     600     600"]
-    _power_raw = ["           3340    1600     600     600     600     600"]
-    _swing_raw = ["           3340    1600     600     600     600     600"]
+    _normal_raw = ["           3304    1652     413     413     413     413"]
+    _power_raw = ["           3304    1652     413     413     413     413"]
+    _swing_raw = ["           3304    1652     413     413     413     413"]
     for x in _normal_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             if x[2] == "0":
-                third = "     600     600"
+                third = "     413     413"
             else:
-                third = "     600    1600"
+                third = "     413    1239"
             _normal_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             _normal_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             _normal_raw.append([first])
 
     for x in _power_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             if x[2] == "0":
-                third = "     600     600"
+                third = "     413     413"
             else:
-                third = "     600    1600"
+                third = "     413    1239"
             _power_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             _power_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             _power_raw.append([first])
 
     for x in _swing_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             if x[2] == "0":
-                third = "     600     600"
+                third = "     413     413"
             else:
-                third = "     600    1600"
+                third = "     413    1239"
             _swing_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             if x[1] == "0":
-                second = "     600     600"
+                second = "     413     413"
             else:
-                second = "     600    1600"
+                second = "     413    1239"
             _swing_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            600     600"
+                first = "            413     413"
             else:
-                first = "            600    1600"
+                first = "            413    1239"
             _swing_raw.append([first])
 
     return string_code[0], _normal_raw, _power_raw, _swing_raw
@@ -227,6 +230,8 @@ def prepareList():
         for fan in FANS[0]:
             for temp in TEMPS[0]:
                 full_list.append(getCode(mode, fan, temp))
+    full_list.append(["POWER_OFF", POWER_OFF, POWER_OFF, POWER_OFF])
+    full_list.append(["FIX", FIX, FIX, FIX])
     binary_full_list = []
     for code in full_list:
         binary_full_list.append(toBinary(code))
@@ -248,11 +253,12 @@ for line in myList:
     print "        name {}".format(line[0])
     for raw in line[1]:
         print "".join(raw)
-    print ("")
-    print "        name {}_POWER".format(line[0])
-    for raw in line[2]:
-        print "".join(raw)
-    print ("")
-    print "        name {}_SWING".format(line[0])
-    for raw in line[3]:
-        print "".join(raw)
+    # print ("")
+    # print "        name {}_POWER".format(line[0])
+    # for raw in line[2]:
+    #     print "".join(raw)
+    if line[0] != "POWER_OFF" and line[0] != "FIX":
+        print ("")
+        print "        name {}_SWING".format(line[0])
+        for raw in line[3]:
+            print "".join(raw)
