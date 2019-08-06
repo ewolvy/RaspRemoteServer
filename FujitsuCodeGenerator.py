@@ -122,15 +122,15 @@ def toRaw(string_code):
             _swing_group.append([x, _swing[count * 3 + 1]])
         elif count * 3 + 1 <= len(_swing):
             _swing_group.append([x])
-    _normal_raw = ["           3304    1652     413     413     413     413"]
-    _power_raw = ["           3304    1652     413     413     413     413"]
-    _swing_raw = ["           3304    1652     413     413     413     413"]
-    for x in _normal_group[2:]:
+    _normal_raw = ["               3304    1652"]#     413     413     413     413"]
+    _power_raw = ["               3304    1652"]#     413     413     413     413"]
+    _swing_raw = ["               3304    1652"]#     413     413     413     413"]
+    for x in _normal_group:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -142,9 +142,9 @@ def toRaw(string_code):
             _normal_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -152,17 +152,18 @@ def toRaw(string_code):
             _normal_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             _normal_raw.append([first])
+    _normal_raw.append(["                413"])
 
     for x in _power_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -174,9 +175,9 @@ def toRaw(string_code):
             _power_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -184,17 +185,18 @@ def toRaw(string_code):
             _power_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             _power_raw.append([first])
+    _power_raw.append(["                413"])
 
     for x in _swing_group[2:]:
         if len(x) == 3:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -206,9 +208,9 @@ def toRaw(string_code):
             _swing_raw.append([first, second, third])
         elif len(x) == 2:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
-                first = "            413    1239"
+                first = "                413    1239"
             if x[1] == "0":
                 second = "     413     413"
             else:
@@ -216,10 +218,11 @@ def toRaw(string_code):
             _swing_raw.append([first, second])
         elif len(x) == 1:
             if x[0] == "0":
-                first = "            413     413"
+                first = "                413     413"
             else:
                 first = "            413    1239"
             _swing_raw.append([first])
+    _swing_raw.append(["                413"])
 
     return string_code[0], _normal_raw, _power_raw, _swing_raw
 
@@ -250,7 +253,7 @@ def prepareList():
 myList = prepareList()
 for line in myList:
     print ("")
-    print "        name {}".format(line[0])
+    print "            name {}".format(line[0])
     for raw in line[1]:
         print "".join(raw)
     # print ("")
@@ -259,6 +262,6 @@ for line in myList:
     #     print "".join(raw)
     if line[0] != "POWER_OFF" and line[0] != "FIX":
         print ("")
-        print "        name {}_SWING".format(line[0])
+        print "            name {}_SWING".format(line[0])
         for raw in line[3]:
             print "".join(raw)
