@@ -35,7 +35,7 @@ def getCode(_mode, _fan, _temp):
     _name = "{}_{}_{}".format(MODES_DICT[_mode],
                               FANS_DICT[_fan],
                               TEMPS_DICT[_temp])
-    _code = "{}{}10{}0{}00000020".format(INIT,
+    _code = "{}{}00{}0{}00000020".format(INIT,
                                          _temp,
                                          _mode,
                                          _fan)
@@ -122,9 +122,9 @@ def toRaw(string_code):
             _swing_group.append([x, _swing[count * 3 + 1]])
         elif count * 3 + 1 <= len(_swing):
             _swing_group.append([x])
-    _normal_raw = ["               3304    1652"]#     413     413     413     413"]
-    _power_raw = ["               3304    1652"]#     413     413     413     413"]
-    _swing_raw = ["               3304    1652"]#     413     413     413     413"]
+    _normal_raw = ["               3304    1652"]
+    _power_raw = ["               3304    1652"]
+    _swing_raw = ["               3304    1652"]
     for x in _normal_group:
         if len(x) == 3:
             if x[0] == "0":
@@ -256,11 +256,11 @@ for line in myList:
     print "            name {}".format(line[0])
     for raw in line[1]:
         print "".join(raw)
-    # print ("")
-    # print "        name {}_POWER".format(line[0])
-    # for raw in line[2]:
-    #     print "".join(raw)
     if line[0] != "POWER_OFF" and line[0] != "FIX":
+        print ("")
+        print "        name {}_POWER".format(line[0])
+        for raw in line[2]:
+            print "".join(raw)
         print ("")
         print "            name {}_SWING".format(line[0])
         for raw in line[3]:

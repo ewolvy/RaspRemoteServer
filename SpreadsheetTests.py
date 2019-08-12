@@ -25,9 +25,9 @@ from itertools import islice
 if __name__ == "__main__":
     wb = xlwt.Workbook()
     ws = wb.add_sheet("My Sheet")
-    for i, filename in enumerate(os.listdir("fujitsu2")):
-        with open("fujitsu2\\" + filename) as fin:
+    for i, filename in enumerate(os.listdir("fujitsu3")):
+        with open("fujitsu3\\" + filename) as fin:
             ws.write(0, i, filename)
             for j, line in enumerate(islice(fin, 2, None)):
                 ws.write(j + 1, i, line.split()[1])
-    wb.save("prueba2.xls")
+    wb.save("prueba3.xls")
