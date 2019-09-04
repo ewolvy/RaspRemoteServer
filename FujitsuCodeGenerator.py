@@ -101,6 +101,7 @@ def toRaw(string_code):
     _normal_group = []
     _power_group = []
     _swing_group = []
+
     for count, x in enumerate(_normal[::3]):
         if count*3 + 3 <= len(_normal):
             _normal_group.append([x, _normal[count*3 + 1], _normal[count*3 + 2]])
@@ -158,7 +159,7 @@ def toRaw(string_code):
             _normal_raw.append([first])
     _normal_raw.append(["                413"])
 
-    for x in _power_group[2:]:
+    for x in _power_group:
         if len(x) == 3:
             if x[0] == "0":
                 first = "                413     413"
@@ -191,7 +192,7 @@ def toRaw(string_code):
             _power_raw.append([first])
     _power_raw.append(["                413"])
 
-    for x in _swing_group[2:]:
+    for x in _swing_group:
         if len(x) == 3:
             if x[0] == "0":
                 first = "                413     413"
