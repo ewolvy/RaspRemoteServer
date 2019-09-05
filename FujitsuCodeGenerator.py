@@ -11,8 +11,6 @@ INIT = "1463001010FE0930"
 TEMPS_DICT = dict(zip(TEMPS[0], TEMPS[1]))
 MODES_DICT = dict(zip(MODES[0], MODES[1]))
 FANS_DICT = dict(zip(FANS[0], FANS[1]))
-POWER_DICT = {"0": "", "1": "_POWER"}
-SWING_DICT = {"0": "", "1": "_SWING"}
 
 POWER_OFF = "146300101002FD"
 FIX = "14630010106C93"
@@ -55,52 +53,71 @@ def getCode(_mode, _fan, _temp):
                                                _fan)
     _checksum_swing = calculateChecksum(_code_swing)
     _code_swing = _code_swing + _checksum_swing
-    return _name, _code, _code_power, _code_swing
+
+    _code_swing_power = "{}{}10{}1{}00000020".format(INIT,
+                                                     _temp,
+                                                     _mode,
+                                                     _fan)
+    _checksum_swing_power = calculateChecksum(_code_swing_power)
+    _code_swing_power = _code_swing_power + _checksum_swing_power
+
+    return _name, _code, _code_power, _code_swing, _code_swing_power
 
 
 def toBinary(full_code):
     _normal = full_code[1]
     _power = full_code[2]
     _swing = full_code[3]
+    _swing_power = full_code[4]
     _normal_binary = []
     _power_binary = []
     _swing_binary = []
+    _swing_power_binary = []
     for x in _normal:
         _normal_binary.append(bin(int(x, base=16))[2:].zfill(4))
     for x in _power:
         _power_binary.append(bin(int(x, base=16))[2:].zfill(4))
     for x in _swing:
         _swing_binary.append(bin(int(x, base=16))[2:].zfill(4))
-    return full_code[0], _normal_binary, _power_binary, _swing_binary
+    for x in _swing_power:
+        _swing_power_binary.append(bin(int(x, base=16))[2:].zfill(4))
+    return full_code[0], _normal_binary, _power_binary, _swing_binary, _swing_power_binary
 
 
 def toBytes(bin_code):
     _normal = bin_code[1]
     _power = bin_code[2]
     _swing = bin_code[3]
+    _swing_power = bin_code[4]
     _normal_byte = []
     _power_byte = []
     _swing_byte = []
+    _swing_power_byte = []
     for x, y in zip(_normal[::2], _normal[1::2]):
         _normal_byte.append(y[::-1] + x[::-1])
     for x, y in zip(_power[::2], _power[1::2]):
         _power_byte.append(y[::-1] + x[::-1])
     for x, y in zip(_swing[::2], _swing[1::2]):
         _swing_byte.append(y[::-1] + x[::-1])
-    return bin_code[0], _normal_byte, _power_byte, _swing_byte
+    for x, y in zip(_swing_power[::2], _swing_power[1::2]):
+        _swing_power_byte.append(y[::-1] + x[::-1])
+
+    return bin_code[0], _normal_byte, _power_byte, _swing_byte, _swing_power_byte
 
 
 def toString(byte_code):
-    return byte_code[0], "".join(byte_code[1]), "".join(byte_code[2]), "".join(byte_code[3])
+    return byte_code[0], "".join(byte_code[1]), "".join(byte_code[2]), "".join(byte_code[3]), "".join(byte_code[4])
 
 
 def toRaw(string_code):
     _normal = string_code[1]
     _power = string_code[2]
     _swing = string_code[3]
+    _swing_power = string_code[4]
     _normal_group = []
     _power_group = []
     _swing_group = []
+    _swing_power_group = []
 
     for count, x in enumerate(_normal[::3]):
         if count*3 + 3 <= len(_normal):
@@ -123,9 +140,18 @@ def toRaw(string_code):
             _swing_group.append([x, _swing[count * 3 + 1]])
         elif count * 3 + 1 <= len(_swing):
             _swing_group.append([x])
+    for count, x in enumerate(_swing_power[::3]):
+        if count*3 + 3 <= len(_swing_power):
+            _swing_power_group.append([x, _swing_power[count*3 + 1], _swing_power[count*3 + 2]])
+        elif count*3 + 2 <= len(_swing_power):
+            _swing_power_group.append([x, _swing_power[count * 3 + 1]])
+        elif count * 3 + 1 <= len(_swing_power):
+            _swing_power_group.append([x])
+
     _normal_raw = ["               3304    1652"]
     _power_raw = ["               3304    1652"]
     _swing_raw = ["               3304    1652"]
+    _swing_power_raw = ["               3304    1652"]
     for x in _normal_group:
         if len(x) == 3:
             if x[0] == "0":
@@ -225,7 +251,40 @@ def toRaw(string_code):
             _swing_raw.append([first])
     _swing_raw.append(["                413"])
 
-    return string_code[0], _normal_raw, _power_raw, _swing_raw
+    for x in _swing_power_group:
+        if len(x) == 3:
+            if x[0] == "0":
+                first = "                413     413"
+            else:
+                first = "                413    1239"
+            if x[1] == "0":
+                second = "     413     413"
+            else:
+                second = "     413    1239"
+            if x[2] == "0":
+                third = "     413     413"
+            else:
+                third = "     413    1239"
+            _swing_power_raw.append([first, second, third])
+        elif len(x) == 2:
+            if x[0] == "0":
+                first = "                413     413"
+            else:
+                first = "                413    1239"
+            if x[1] == "0":
+                second = "     413     413"
+            else:
+                second = "     413    1239"
+            _swing_power_raw.append([first, second])
+        elif len(x) == 1:
+            if x[0] == "0":
+                first = "                413     413"
+            else:
+                first = "                413    1239"
+            _swing_power_raw.append([first])
+    _swing_power_raw.append(["                413"])
+
+    return string_code[0], _normal_raw, _power_raw, _swing_raw, _swing_power_raw
 
 
 def prepareList():
@@ -234,8 +293,8 @@ def prepareList():
         for fan in FANS[0]:
             for temp in TEMPS[0]:
                 full_list.append(getCode(mode, fan, temp))
-    full_list.append(["POWER_OFF", POWER_OFF, POWER_OFF, POWER_OFF])
-    full_list.append(["FIX", FIX, FIX, FIX])
+    full_list.append(["POWER_OFF", POWER_OFF, POWER_OFF, POWER_OFF, POWER_OFF])
+    full_list.append(["FIX", FIX, FIX, FIX, FIX])
     binary_full_list = []
     for code in full_list:
         binary_full_list.append(toBinary(code))
@@ -265,4 +324,8 @@ for line in myList:
         print ("")
         print "            name {}_SWING".format(line[0])
         for raw in line[3]:
+            print "".join(raw)
+        print ("")
+        print "        name {}_SWING_POWER".format(line[0])
+        for raw in line[4]:
             print "".join(raw)
