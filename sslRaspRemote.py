@@ -12,7 +12,8 @@ import time
 from SimpleHTTPServer import SimpleHTTPRequestHandler
 
 key = ""
-init_ir_send = "irsend -d /run/lirc/lircd-lirc0 SEND_ONCE "
+# init_ir_send = "irsend -d /run/lirc/lircd-lirc0 SEND_ONCE "
+init_ir_send = "irsend SEND_ONCE "
 init_rf_send = "python3 /usr/bin/rfsend.py -p 180 -t 1 "
 
 
@@ -22,7 +23,7 @@ class AuthHandler(SimpleHTTPRequestHandler):
     def execute(self, command):
         print(command)
         result = os.system(command)
-        self.wfile.write(json.dumps({"Command":result}))
+        self.wfile.write(json.dumps({'Response': [{"Command": command}, {"Result": result}]}))
 
     def do_HEAD(self):
         print "Send header"
@@ -54,8 +55,11 @@ class AuthHandler(SimpleHTTPRequestHandler):
             elif re.match('/AAKaysun/', self.path) is not None:
                 send_command = init_ir_send + "AAKaysun " + self.path[10:]
                 self.execute(send_command)
-            elif re.match('/HBathroom/', self.path) is not None:
-                send_command = init_rf_send + self.path[11:]
+            elif re.match('/AAGeneral/', self.path) is not None:
+                send_command = init_ir_send + "AAGeneral " + self.path[11:]
+                self.execute(send_command)
+            elif re.match('/SPBathroom/', self.path) is not None:
+                send_command = init_rf_send + self.path[12:]
                 self.execute(send_command)
             elif re.match('/Pruebas/', self.path) is not None:
                 send_command = init_rf_send + self.path[9:]
@@ -81,7 +85,7 @@ def create_server(port, password):
                                    # certfile='/home/osmc/ewolvy.mooo.com.pem',
                                    # keyfile='/home/osmc/ewolvy.mooo.com.private.pem',
                                    certfile='./ewolvy.mooo.com.pem',
-                                   keyfile='./ewolvy.mooo.com.private.key',
+                                   keyfile='./ewolvy.mooo.com.private.pem',
                                    ssl_version=ssl.PROTOCOL_TLSv1)
     httpd.serve_forever()
 
